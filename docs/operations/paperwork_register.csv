@@ -6,3 +6,6 @@ Earnings Disclaimer,docs/legal/earnings_disclaimer_template.md,,, , ,
 Tax and Payout Checklist,docs/operations/tax_and_payout_checklist.md,,, , ,
 Compliance Checklist,docs/operations/compliance_checklist.md,,, , ,
 Onboarding Checklist,docs/operations/onboarding_checklist.md,,, , ,
+Security Policy,SECURITY.md,,Final,2026-03-11,2026-09-11,v1.1.0 — SSRF + CSV injection + path traversal patches
+Changelog,CHANGELOG.md,,Final,2026-03-11,,Updated each release; see docs/operations/release_checklist.md
+Release Checklist,docs/operations/release_checklist.md,,Final,2026-03-11,,Fill out before every build/tag

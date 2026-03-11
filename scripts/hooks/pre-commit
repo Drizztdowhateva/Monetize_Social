@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# MonetizeSocial pre-commit hook
+# Install: make install-hooks
+#
+# Warns if CHANGELOG.md has not been touched in this commit.
+# Does NOT block the commit — prints a reminder and exits 0.
+
+set -euo pipefail
+
+CHANGELOG="CHANGELOG.md"
+SECURITY="SECURITY.md"
+RELEASE_CHECKLIST="docs/operations/release_checklist.md"
+
+STAGED=$(git diff --cached --name-only 2>/dev/null || true)
+
+echo ""
+echo "── MonetizeSocial pre-commit checks ──────────────────────────────"
+
+# ── 1. CHANGELOG reminder ─────────────────────────────────────────────
+if echo "$STAGED" | grep -q "^$CHANGELOG$"; then
+    echo "  ✓ CHANGELOG.md is staged."
+else
+    echo "  ⚠  CHANGELOG.md is NOT staged in this commit."
+    echo "     If this is a release or feature/fix commit, update CHANGELOG.md"
+    echo "     and follow docs/operations/release_checklist.md before tagging."
+fi
+
+# ── 2. Security file reminder (only if pipeline source changed) ───────
+PIPELINE_CHANGED=$(echo "$STAGED" | grep -E "^src/monetize_social/affiliate_pipeline\.py$" || true)
+SECURITY_CHANGED=$(echo "$STAGED" | grep -q "^$SECURITY$" && echo "yes" || true)
+
+if [ -n "$PIPELINE_CHANGED" ] && [ -z "$SECURITY_CHANGED" ]; then
+    echo "  ⚠  affiliate_pipeline.py changed but SECURITY.md was NOT staged."
+    echo "     Review for new security-relevant changes and update SECURITY.md"
+    echo "     if needed."
+fi
+
+# ── 3. CSV injection / SSRF guard check (grep, non-blocking) ─────────
+if echo "$STAGED" | grep -qE "^src/.*\.py$"; then
+    ADDED_URLOPEN=$(git diff --cached -U0 -- 'src/**/*.py' 2>/dev/null \
+        | grep "^+" | grep -E "urlopen|requests\.get|requests\.post" | grep -v "_is_safe_url" || true)
+    if [ -n "$ADDED_URLOPEN" ]; then
+        echo "  ⚠  New HTTP call detected that may not use _is_safe_url():"
+        echo "$ADDED_URLOPEN" | head -5 | sed 's/^/       /'
+        echo "     Ensure SSRF guard is applied before merging."
+    fi
+
+    ADDED_CSV_WRITE=$(git diff --cached -U0 -- 'src/**/*.py' 2>/dev/null \
+        | grep "^+" | grep -E "csv\.writer|writerow|to_csv" | grep -v "_sanitize_csv_cell" || true)
+    if [ -n "$ADDED_CSV_WRITE" ]; then
+        echo "  ⚠  New CSV write detected that may not use _sanitize_csv_cell():"
+        echo "$ADDED_CSV_WRITE" | head -5 | sed 's/^/       /'
+        echo "     Ensure CSV injection guard is applied before merging."
+    fi
+fi
+
+echo "──────────────────────────────────────────────────────────────────"
+echo ""
+
+# Always exit 0 — informational only, never blocks commit.
+exit 0

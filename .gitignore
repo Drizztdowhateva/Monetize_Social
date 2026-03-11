@@ -21,8 +21,12 @@ venv/
 *.pem
 *.key
 
-# Data exports
-exports/
+# Generated outputs — keep off public repo
+data/exports/
+data/snapshots/
+data/caption_templates/
+docs/onboarding_packets/
+docs/email_drafts/
 *.xlsx
 
 # Runtime packaging artifacts

@@ -32,3 +32,6 @@ docs/email_drafts/
 # Runtime packaging artifacts
 dist_runtime/
 build_runtime/
+
+# Local checkpoints
+backups/

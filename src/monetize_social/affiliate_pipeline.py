@@ -256,6 +256,18 @@ def _sanitize_csv_cell(value: object) -> str:
     return text
 
 
+def _to_excel_cell(value: object) -> object:
+    if value is None:
+        return ""
+    if isinstance(value, (str, int, float, bool)):
+        return value
+    if isinstance(value, list):
+        return ", ".join(str(v) for v in value)
+    if isinstance(value, dict):
+        return json.dumps(value)
+    return str(value)
+
+
 def write_csv(path: Path, rows: list[dict], columns: list[str]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=columns)
@@ -287,6 +299,7 @@ def add_data_validation(ws, header: list[str]) -> None:
 
 
 def write_sheet(ws, rows: list[dict], columns: list[str]) -> None:
+    columns = [c for c in columns if isinstance(c, str) and c]
     ws.append(columns)
 
     header_fill = PatternFill(start_color="DCE6F1", end_color="DCE6F1", fill_type="solid")
@@ -299,7 +312,7 @@ def write_sheet(ws, rows: list[dict], columns: list[str]) -> None:
         cell.alignment = Alignment(wrap_text=True)
 
     for row in rows:
-        ws.append([row.get(col_name, "") for col_name in columns])
+        ws.append([_to_excel_cell(row.get(col_name, "")) for col_name in columns])
 
     ws.freeze_panes = "A2"
     add_data_validation(ws, columns)
@@ -517,7 +530,7 @@ def build_workbook(paths: PipelinePaths, rows: list[dict], issues: list[dict]) -
     wb = Workbook()
     wb.remove(wb.active)
 
-    all_columns = list(rows[0].keys()) if rows else []
+    all_columns = [c for c in list(rows[0].keys()) if isinstance(c, str) and c] if rows else []
 
     write_sheet(wb.create_sheet("Master"), rows, all_columns)
     write_sheet(wb.create_sheet("Priority Apply"), priority_rows, priority_columns)

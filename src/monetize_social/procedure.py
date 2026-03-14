@@ -18,6 +18,7 @@ class ProcedureDocument:
 PROCEDURE_DOCUMENTS = [
     ProcedureDocument("Easiest Onboarding Playbook", "docs/operations/easiest_onboarding_playbook.md"),
     ProcedureDocument("Affiliate Onboarding Checklist", "docs/operations/affiliate-onboarding-checklist.md"),
+    ProcedureDocument("Sponsorship + Affiliate Playbook", "docs/operations/sponsorship_affiliate_playbook.md"),
     ProcedureDocument("Tax and Payout Checklist", "docs/operations/tax_and_payout_checklist.md"),
 ]
 

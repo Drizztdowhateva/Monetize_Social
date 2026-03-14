@@ -35,8 +35,14 @@ Run the desktop app:
 The GUI includes:
 
 - `Procedure` tab: guided checklists from onboarding and tax playbooks
+- `Procedure` tab also includes a `Sponsorship + Affiliate Playbook` for outreach, packaging, and deal tracking
 - `Pipeline` tab: run full build and generate onboarding packets
 - `Hashtag Ads` tab: collect hashtag seeds from affiliate master data and generate ad captions
+- `Hashtag Ads` tab supports `Top Sponsors -> Hashtags` to turn ranked sponsor targets into campaign hashtag seeds
+- `Hashtag Ads` tab supports `Top Sponsors -> Captions` for one-click sponsor-aligned draft captions
+- `Sponsors` tab: track sponsor forms, qualification requirements, and discovery status
+- `Sponsors` tab also includes budget settings to filter affordable opportunities by investment amount
+- `Sponsors` tab also includes vertical filters, weighted scoring, auto-discovery URL assist, and weekly bundle exports
 - `Outputs` tab: see which required output files are present or missing
 
 ## Hashtag Advertising Flow
@@ -74,6 +80,13 @@ Notes:
 - `data/exports/monthly_dashboard_summary.csv`
 - `data/exports/validation_issues.csv`
 - `data/exports/hashtag_campaign_plan.csv`
+- `data/exports/top_sponsor_hashtag_plan.csv`
+- `data/exports/top_sponsors_this_week.csv`
+- `data/exports/sponsor_followup_sequence.csv`
+- `data/exports/sponsor_attribution_pack.csv`
+- `data/exports/sponsor_roi_model.csv`
+- `data/exports/sponsor_kanban_board.md`
+- `data/exports/sponsor_dashboard_summary.csv`
 - `data/exports/affiliate_tracker_workbook.xlsx`
 - `data/snapshots/affiliate_master_snapshot_*.csv`
 - `data/snapshots/changelog.md`
@@ -81,8 +94,10 @@ Notes:
 ## Easiest Onboarding
 
 - Playbook: `docs/operations/easiest_onboarding_playbook.md`
+- Sponsorship + affiliate playbook: `docs/operations/sponsorship_affiliate_playbook.md`
 - Auto-generated packets: `docs/onboarding_packets/<platform>/`
 - Outreach tracker: `data/templates/outreach_crm_lite.csv`
+- Sponsor discovery tracker (forms + requirements + qualifications): `data/templates/sponsor_discovery_tracker.csv`
 
 ## Taxes (LLC Sole Proprietor, 1099)
 

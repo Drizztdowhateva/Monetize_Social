@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 
 
-TOKEN_SPLIT_RE = re.compile(r"[,;/|\\n]+")
+TOKEN_SPLIT_RE = re.compile(r"[,;/|\n]+")
 NON_WORD_RE = re.compile(r"[^a-zA-Z0-9 ]+")
 
 
